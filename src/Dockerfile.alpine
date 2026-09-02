@@ -18,7 +18,7 @@ RUN set -eux \
     zlib-dev \
     curl-dev \
     libgcrypt-dev \
-    libcjson-dev \
+    cjson-dev \
   && if [ "$FLAVOR" = "thiq" ]; then \
     apk add --no-cache \
       python3-dev \
@@ -70,7 +70,7 @@ RUN set -eux \
     zlib \
     libcurl \
     libgcrypt \
-    libcjson \
+    cjson \
     gettext-libs \
     ca-certificates \
   && if [ "$FLAVOR" = "thiq" ]; then \

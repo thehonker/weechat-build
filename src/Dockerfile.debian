@@ -81,7 +81,7 @@ RUN set -eux \
       liblua5.4-0 \
       tcl \
       guile-3.0 \
-      libaspell2 \
+      libaspell15 \
       libenchant-2-2; \
   fi \
   && rm -rf /var/lib/apt/lists/* \
