@@ -4,7 +4,7 @@ Containerized builds of [WeeChat](https://github.com/weechat/weechat), compiled 
 
 ## Images
 
-Images are published to `ghcr.io/thehonker/weechat` with two base variants and two flavors:
+Images are published to [ghcr.io/thehonker/weechat](https://github.com/thehonker/weechat-build/pkgs/container/weechat) with two base variants and two flavors:
 
 | Base | Flavor | Description |
 |------|--------|-------------|
@@ -13,51 +13,49 @@ Images are published to `ghcr.io/thehonker/weechat` with two base variants and t
 | Debian | slim | WeeChat only, no scripting |
 | Debian | thiq | WeeChat + all scripting language support |
 
-Each variant has nightly and stable tracks:
-
 ### Alpine Slim
 
-alpine-slim-nightly: _(not yet built)_
-alpine-slim-stable: _(not yet built)_
+[![alpine-slim-nightly](https://github.com/thehonker/weechat-build/actions/workflows/container-image-alpine-slim-nightly.yml/badge.svg)](https://github.com/thehonker/weechat-build/actions/workflows/container-image-alpine-slim-nightly.yml)
+[![alpine-slim-stable](https://github.com/thehonker/weechat-build/actions/workflows/container-image-alpine-slim-stable.yml/badge.svg)](https://github.com/thehonker/weechat-build/actions/workflows/container-image-alpine-slim-stable.yml)
 
-```
+```none
 ghcr.io/thehonker/weechat:alpine-slim-latest
 ghcr.io/thehonker/weechat:alpine-slim-stable
 ```
 
 ### Alpine Thiq
 
-alpine-thiq-nightly: _(not yet built)_
-alpine-thiq-stable: _(not yet built)_
+[![alpine-thiq-nightly](https://github.com/thehonker/weechat-build/actions/workflows/container-image-alpine-thiq-nightly.yml/badge.svg)](https://github.com/thehonker/weechat-build/actions/workflows/container-image-alpine-thiq-nightly.yml)
+[![alpine-thiq-stable](https://github.com/thehonker/weechat-build/actions/workflows/container-image-alpine-thiq-stable.yml/badge.svg)](https://github.com/thehonker/weechat-build/actions/workflows/container-image-alpine-thiq-stable.yml)
 
-```
+```none
 ghcr.io/thehonker/weechat:alpine-thiq-latest
 ghcr.io/thehonker/weechat:alpine-thiq-stable
 ```
 
 ### Debian Slim
 
-debian-slim-nightly: _(not yet built)_
-debian-slim-stable: _(not yet built)_
+[![debian-slim-nightly](https://github.com/thehonker/weechat-build/actions/workflows/container-image-debian-slim-nightly.yml/badge.svg)](https://github.com/thehonker/weechat-build/actions/workflows/container-image-debian-slim-nightly.yml)
+[![debian-slim-stable](https://github.com/thehonker/weechat-build/actions/workflows/container-image-debian-slim-stable.yml/badge.svg)](https://github.com/thehonker/weechat-build/actions/workflows/container-image-debian-slim-stable.yml)
 
-```
+```none
 ghcr.io/thehonker/weechat:debian-slim-latest
 ghcr.io/thehonker/weechat:debian-slim-stable
 ```
 
 ### Debian Thiq
 
-debian-thiq-nightly: _(not yet built)_
-debian-thiq-stable: _(not yet built)_
+[![debian-thiq-nightly](https://github.com/thehonker/weechat-build/actions/workflows/container-image-debian-thiq-nightly.yml/badge.svg)](https://github.com/thehonker/weechat-build/actions/workflows/container-image-debian-thiq-nightly.yml)
+[![debian-thiq-stable](https://github.com/thehonker/weechat-build/actions/workflows/container-image-debian-thiq-stable.yml/badge.svg)](https://github.com/thehonker/weechat-build/actions/workflows/container-image-debian-thiq-stable.yml)
 
-```
+```none
 ghcr.io/thehonker/weechat:debian-thiq-latest
 ghcr.io/thehonker/weechat:debian-thiq-stable
 ```
 
 ### Tags
 
-Each build also gets a datestamp tag (e.g. `alpine-slim-20260829`) and a ref tag (e.g. `alpine-slim-a3f7c2d` for nightlies, `alpine-slim-v4.6.0` for stable).
+Each build also gets a datestamp tag (e.g. `alpine-slim-20260902`) and a ref tag (e.g. `alpine-slim-a3f7c2d` for nightlies, `alpine-slim-v4.6.0` for stable). Build provenance is tracked in the [`refs/`](refs/) directory.
 
 ## Running
 
