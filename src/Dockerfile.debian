@@ -20,6 +20,7 @@ RUN set -eux \
     libgcrypt20-dev \
     libzstd-dev \
     asciidoctor \
+    libcjson-dev \
   && if [ "$FLAVOR" = "thiq" ]; then \
     apt-get install -y --no-install-recommends \
       python3-dev \
@@ -74,6 +75,7 @@ RUN set -eux \
     libgcrypt20 \
     libzstd1 \
     ca-certificates \
+    libcjson1 \
   && if [ "$FLAVOR" = "thiq" ]; then \
     apt-get install -y --no-install-recommends \
       python3 \
