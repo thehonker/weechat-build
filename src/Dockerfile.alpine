@@ -51,7 +51,7 @@ RUN set -eux \
     -DENABLE_TCL=$SCRIPTING \
     -DENABLE_GUILE=$SCRIPTING \
     -DENABLE_PHP=OFF \
-    -DENABLE_ASPELL=$SCRIPTING \
+    -DENABLE_SPELL=$SCRIPTING \
     -DENABLE_ENCHANT=$SCRIPTING \
   && make -j"$(nproc)" \
   && make install DESTDIR=/install
