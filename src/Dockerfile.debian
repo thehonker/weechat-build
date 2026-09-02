@@ -18,6 +18,7 @@ RUN set -eux \
     zlib1g-dev \
     libcurl4-openssl-dev \
     libgcrypt20-dev \
+    libzstd-dev \
   && if [ "$FLAVOR" = "thiq" ]; then \
     apt-get install -y --no-install-recommends \
       python3-dev \
@@ -70,6 +71,7 @@ RUN set -eux \
     zlib1g \
     libcurl4 \
     libgcrypt20 \
+    libzstd1 \
     ca-certificates \
   && if [ "$FLAVOR" = "thiq" ]; then \
     apt-get install -y --no-install-recommends \

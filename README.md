@@ -17,7 +17,7 @@ Each variant has nightly and stable tracks:
 
 ### Alpine Slim
 
-alpine-slim-nightly: _(not yet built)_
+alpine-slim-nightly: _(not yet built)_ \
 alpine-slim-stable: _(not yet built)_
 
 ```
@@ -27,7 +27,7 @@ ghcr.io/thehonker/weechat:alpine-slim-stable
 
 ### Alpine Thiq
 
-alpine-thiq-nightly: _(not yet built)_
+alpine-thiq-nightly: _(not yet built)_ \
 alpine-thiq-stable: _(not yet built)_
 
 ```
@@ -37,7 +37,7 @@ ghcr.io/thehonker/weechat:alpine-thiq-stable
 
 ### Debian Slim
 
-debian-slim-nightly: _(not yet built)_
+debian-slim-nightly: _(not yet built)_ \
 debian-slim-stable: _(not yet built)_
 
 ```
@@ -47,7 +47,7 @@ ghcr.io/thehonker/weechat:debian-slim-stable
 
 ### Debian Thiq
 
-debian-thiq-nightly: _(not yet built)_
+debian-thiq-nightly: _(not yet built)_ \
 debian-thiq-stable: _(not yet built)_
 
 ```
