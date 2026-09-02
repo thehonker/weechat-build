@@ -79,6 +79,7 @@ RUN set -eux \
   && if [ "$FLAVOR" = "thiq" ]; then \
     apt-get install -y --no-install-recommends \
       python3 \
+      libpython3.11 \
       perl \
       ruby \
       liblua5.4-0 \
