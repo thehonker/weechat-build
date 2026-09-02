@@ -19,6 +19,7 @@ RUN set -eux \
     libcurl4-openssl-dev \
     libgcrypt20-dev \
     libzstd-dev \
+    asciidoctor \
   && if [ "$FLAVOR" = "thiq" ]; then \
     apt-get install -y --no-install-recommends \
       python3-dev \
@@ -26,7 +27,7 @@ RUN set -eux \
       ruby-dev \
       liblua5.4-dev \
       tcl-dev \
-      libguile-3.0-dev \
+      guile-3.0-dev \
       libaspell-dev \
       libenchant-2-dev; \
   fi \
