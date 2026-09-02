@@ -1,0 +1,94 @@
+# syntax=docker/dockerfile:1
+
+ARG FLAVOR=slim
+
+# ---- builder ----
+FROM docker.io/debian:bookworm-slim AS builder
+ARG FLAVOR
+
+RUN set -eux \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
+    cmake \
+    build-essential \
+    pkg-config \
+    gettext \
+    libncurses-dev \
+    libgnutls28-dev \
+    zlib1g-dev \
+    libcurl4-openssl-dev \
+    libgcrypt20-dev \
+  && if [ "$FLAVOR" = "thiq" ]; then \
+    apt-get install -y --no-install-recommends \
+      python3-dev \
+      libperl-dev \
+      ruby-dev \
+      liblua5.4-dev \
+      tcl-dev \
+      libguile-3.0-dev \
+      libaspell-dev \
+      libenchant-2-dev; \
+  fi \
+  && rm -rf /var/lib/apt/lists/*
+
+COPY ./weechat /src/weechat
+
+RUN set -eux \
+  && if [ "$FLAVOR" = "thiq" ]; then SCRIPTING=ON; else SCRIPTING=OFF; fi \
+  && cd /src/weechat \
+  && mkdir build && cd build \
+  && cmake .. \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DENABLE_MAN=ON \
+    -DENABLE_DOC=OFF \
+    -DENABLE_TESTS=OFF \
+    -DENABLE_PYTHON=$SCRIPTING \
+    -DENABLE_PERL=$SCRIPTING \
+    -DENABLE_RUBY=$SCRIPTING \
+    -DENABLE_LUA=$SCRIPTING \
+    -DENABLE_TCL=$SCRIPTING \
+    -DENABLE_GUILE=$SCRIPTING \
+    -DENABLE_PHP=OFF \
+    -DENABLE_ASPELL=$SCRIPTING \
+    -DENABLE_ENCHANT=$SCRIPTING \
+  && make -j"$(nproc)" \
+  && make install DESTDIR=/install
+
+# ---- runtime ----
+FROM docker.io/debian:bookworm-slim
+ARG FLAVOR
+
+ENV LANG=C.UTF-8
+ENV TERM=xterm-256color
+
+RUN set -eux \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
+    libncurses6 \
+    libgnutls30 \
+    zlib1g \
+    libcurl4 \
+    libgcrypt20 \
+    ca-certificates \
+  && if [ "$FLAVOR" = "thiq" ]; then \
+    apt-get install -y --no-install-recommends \
+      python3 \
+      perl \
+      ruby \
+      liblua5.4-0 \
+      tcl \
+      guile-3.0 \
+      libaspell2 \
+      libenchant-2-2; \
+  fi \
+  && rm -rf /var/lib/apt/lists/* \
+  && groupadd -g 1101 weechat \
+  && useradd -u 1101 -g weechat -m -s /bin/bash weechat
+
+COPY --from=builder /install/usr /usr
+
+USER weechat
+WORKDIR /home/weechat
+
+ENTRYPOINT ["/usr/bin/weechat"]

@@ -1,0 +1,24 @@
+name: WeeChat - Alpine Thiq - Nightly
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # 00:00 daily
+    - cron: "0 0 * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: "weechat-nightly-alpine-thiq"
+  cancel-in-progress: true
+
+jobs:
+  build-and-push:
+    permissions:
+      contents: write
+      packages: write
+    uses: ./.github/workflows/container-image-ci-base.yml
+    with:
+      base: alpine
+      flavor: thiq
+      build-type: hash

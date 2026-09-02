@@ -1,0 +1,93 @@
+# syntax=docker/dockerfile:1
+
+ARG FLAVOR=slim
+
+# ---- builder ----
+FROM docker.io/alpine:3 AS builder
+ARG FLAVOR
+
+RUN set -eux \
+  && apk add --no-cache \
+    cmake \
+    build-base \
+    pkgconf \
+    coreutils \
+    gettext-dev \
+    ncurses-dev \
+    gnutls-dev \
+    zlib-dev \
+    curl-dev \
+    libgcrypt-dev \
+  && if [ "$FLAVOR" = "thiq" ]; then \
+    apk add --no-cache \
+      python3-dev \
+      perl-dev \
+      ruby-dev \
+      lua5.4-dev \
+      tcl-dev \
+      guile-dev \
+      aspell-dev \
+      enchant2-dev; \
+  fi
+
+COPY ./weechat /src/weechat
+
+RUN set -eux \
+  && if [ "$FLAVOR" = "thiq" ]; then SCRIPTING=ON; else SCRIPTING=OFF; fi \
+  && cd /src/weechat \
+  && mkdir build && cd build \
+  && cmake .. \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DENABLE_MAN=ON \
+    -DENABLE_DOC=OFF \
+    -DENABLE_TESTS=OFF \
+    -DENABLE_PYTHON=$SCRIPTING \
+    -DENABLE_PERL=$SCRIPTING \
+    -DENABLE_RUBY=$SCRIPTING \
+    -DENABLE_LUA=$SCRIPTING \
+    -DENABLE_TCL=$SCRIPTING \
+    -DENABLE_GUILE=$SCRIPTING \
+    -DENABLE_PHP=OFF \
+    -DENABLE_ASPELL=$SCRIPTING \
+    -DENABLE_ENCHANT=$SCRIPTING \
+  && make -j"$(nproc)" \
+  && make install DESTDIR=/install
+
+# ---- runtime ----
+FROM docker.io/alpine:3
+ARG FLAVOR
+
+ENV LANG=C.UTF-8
+ENV TERM=xterm-256color
+
+RUN set -eux \
+  && apk add --no-cache \
+    ncurses \
+    ncurses-terminfo \
+    gnutls \
+    zlib \
+    libcurl \
+    libgcrypt \
+    gettext-libs \
+    ca-certificates \
+  && if [ "$FLAVOR" = "thiq" ]; then \
+    apk add --no-cache \
+      python3 \
+      perl \
+      ruby \
+      lua5.4 \
+      tcl \
+      guile \
+      aspell-libs \
+      enchant2; \
+  fi \
+  && addgroup -g 1101 weechat \
+  && adduser -u 1101 -G weechat -D -s /bin/ash weechat
+
+COPY --from=builder /install/usr /usr
+
+USER weechat
+WORKDIR /home/weechat
+
+ENTRYPOINT ["/usr/bin/weechat"]

@@ -1,0 +1,74 @@
+name: Regenerate README
+on:
+  schedule:
+    # 01:30 daily — runs after nightly builds
+    - cron: "1 30 * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: "weechat-readme-regen"
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    runs-on: self-hosted
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Regenerate README build refs
+        run: |
+          set -eu
+
+          # Ref file format (4 lines):
+          #   line 1: GIT_REF (tag name or short hash)
+          #   line 2: FULL_HASH
+          #   line 3: SHORT_HASH
+          #   line 4: BUILD_DATE
+
+          update_line() {
+            local key="$1"
+            local file="refs/${key}.txt"
+            local label="${key%-nightly}"
+            label="${label%-stable}"
+
+            if [[ -f "$file" ]]; then
+              mapfile -t lines < "$file"
+              ref="${lines[0]}"
+              full_hash="${lines[1]}"
+              short_hash="${lines[2]}"
+              build_date="${lines[3]}"
+
+              if [[ "$key" == *-stable ]]; then
+                value="${key}: \`${ref}\` (${build_date})"
+              else
+                value="${key}: [\`${short_hash}\`](https://github.com/weechat/weechat/commit/${full_hash}) (${build_date})"
+              fi
+            else
+              value="${key}: _(not yet built)_"
+            fi
+
+            # Escape sed special chars in value
+            escaped_value=$(printf '%s\n' "$value" | sed 's/[&/\]/\\&/g')
+            sed -i "s/^${key}: .*/${escaped_value}/" README.md
+          }
+
+          for key in \
+            alpine-slim-nightly alpine-slim-stable \
+            alpine-thiq-nightly alpine-thiq-stable \
+            debian-slim-nightly debian-slim-stable \
+            debian-thiq-nightly debian-thiq-stable; do
+            update_line "$key"
+          done
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git diff --cached --quiet || {
+            git commit -m "Regenerate README build refs"
+            git push
+          }

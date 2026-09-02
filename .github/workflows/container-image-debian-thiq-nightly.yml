@@ -1,0 +1,24 @@
+name: WeeChat - Debian Thiq - Nightly
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # 00:00 daily
+    - cron: "0 0 * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: "weechat-nightly-debian-thiq"
+  cancel-in-progress: true
+
+jobs:
+  build-and-push:
+    permissions:
+      contents: write
+      packages: write
+    uses: ./.github/workflows/container-image-ci-base.yml
+    with:
+      base: debian
+      flavor: thiq
+      build-type: hash
