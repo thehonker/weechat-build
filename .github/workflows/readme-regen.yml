@@ -1,8 +1,8 @@
 name: Regenerate README
 on:
   schedule:
-    # 01:30 daily — runs after nightly builds
-    - cron: "01 30 * * *"
+    # 04:00 daily — runs some time after nightly builds
+    - cron: "0 4 * * *"
   workflow_dispatch: {}
 
 concurrency:
